@@ -11,16 +11,22 @@ import java.util.Objects;
 @Service
 public class CsvService {
 
-    private CsvMapper mapper = new CsvMapper();
+    private static final CsvMapper mapper = new CsvMapper();
 
     /**
      * Create schema based on a Java class. Schema will have column names and ordering + column types.
      */
-    List<Pojo> createSchemaBasedOnJavaClass() throws IOException {
-        var resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("convertcsv.csv");
-        var schema = mapper.schemaFor(Pojo.class).withSkipFirstDataRow(true); // schema from 'Pojo' definition
+    List<Pojo> getObjectsFromCsvFile() throws IOException {
+        var resourceAsStream = this.getClass()
+                .getClassLoader()
+                .getResourceAsStream("convertcsv.csv");
 
-        MappingIterator<Pojo> it = mapper.readerFor(Pojo.class).with(schema).readValues(Objects.requireNonNull(resourceAsStream));
+        var schema = mapper.schemaFor(Pojo.class)
+                .withHeader(); // or use -> .withSkipFirstDataRow(true); // schema from 'Pojo' definition
+
+        MappingIterator<Pojo> it = mapper.readerFor(Pojo.class)
+                .with(schema)
+                .readValues(Objects.requireNonNull(resourceAsStream));
 
         return it.readAll();
     }

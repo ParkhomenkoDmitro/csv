@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 @SpringBootTest
-class CsvApplicationTests {
+class CsvV2ApplicationTests {
 
 	@Autowired
-	private CsvService csvService;
+	private CsvServiceV2 csvService;
 
 	@Test
 	void createSchemaBasedOnJavaClass() throws IOException {
